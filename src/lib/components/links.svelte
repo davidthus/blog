@@ -17,7 +17,6 @@
 	});
 
 	$: realtimeAge = (currentTime - dateOfBirth) / 1000;
-	console.log(realtimeAge);
 </script>
 
 <div class="flex w-full justify-center absolute bottom-8">
