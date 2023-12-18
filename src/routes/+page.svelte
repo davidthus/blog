@@ -16,15 +16,9 @@
 </script>
 
 <h1 class="text-8xl w-full max-w-2xl text-center text-text font-roman">
-	The {#if isBlendModeDiff}
-		<strong
-			transition:fade={{ delay: 500, duration: 400 }}
-			class="text-accent inline transition duration-700 mix-blend-difference">Artful Alcove</strong
-		>
-	{:else}
-		<strong
-			transition:fade={{ delay: 500, duration: 400 }}
-			class="text-accent inline transition duration-700 mix-blend-multiply">Artful Alcove</strong
-		>
-	{/if} of davidthus
+	The <strong
+		class="text-accent inline transition duration-700 {isBlendModeDiff
+			? 'mix-blend-difference'
+			: 'mix-blend-multiply'}">Artful Alcove</strong
+	> of davidthus
 </h1>
