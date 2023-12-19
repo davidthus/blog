@@ -10,7 +10,7 @@
 		<div class="rounded-full bg-text w-2 h-2" />
 		<a href="https://twitter.com/dvdthus" target="_blank">Twitter</a>
 		<div class="rounded-full bg-text w-2 h-2" />
-		<a href="https://github.com/davidthus" target="_blank">Github</a>
+		<a href="https://github.com/davidthus" target="_blank">GitHub</a>
 		<div class="rounded-full bg-text w-2 h-2" />
 		<a href="https://www.youtube.com/@davidthus" target="_blank">YouTube</a>
 		<div class="rounded-full bg-text w-2 h-2" />
