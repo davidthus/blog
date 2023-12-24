@@ -1,5 +1,13 @@
 <script>
-	const links = ['Stories', 'Art', 'Poems', 'Misc'];
+	import { user } from '$lib/firebase';
+
+	let links = ['Stories', 'Art', 'Poems', 'Misc'];
+
+	$: if ($user && $user.email === 'dvdnicorici05@gmail.com') {
+		links = ['Stories', 'Art', 'Poems', 'Misc', 'Console'];
+	} else {
+		links = ['Stories', 'Art', 'Poems', 'Misc'];
+	}
 </script>
 
 <nav class="pr-16">
