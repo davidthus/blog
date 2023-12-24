@@ -1,5 +1,5 @@
 <script>
-	const links = ['Writing', 'Poems', 'Art', 'Stories'];
+	const links = ['Stories', 'Art', 'Poems', 'Misc'];
 </script>
 
 <nav class="pr-16">
