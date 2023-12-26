@@ -1,4 +1,4 @@
-import { doc, getFirestore, onSnapshot } from 'firebase/firestore';
+import { collection, doc, getFirestore, onSnapshot } from 'firebase/firestore';
 
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged, type User } from 'firebase/auth';
@@ -63,5 +63,36 @@ export function docStore<T>(path: string) {
 		subscribe,
 		ref: docRef,
 		id: docRef.id
+	};
+}
+
+export function collectionStore<T>(ref: string, startWith: T[] = []) {
+	let unsubscribe: () => void;
+
+	// Fallback for SSR
+	if (!globalThis.window) {
+		const { subscribe } = writable(startWith);
+		return {
+			subscribe,
+			ref: null
+		};
+	}
+
+	const colRef = typeof ref === 'string' ? collection(db, ref) : ref;
+
+	const { subscribe } = writable(startWith, (set) => {
+		unsubscribe = onSnapshot(colRef, (snapshot) => {
+			const data = snapshot.docs.map((s) => {
+				return { id: s.id, ref: s.ref, ...s.data() } as T;
+			});
+			set(data);
+		});
+
+		return () => unsubscribe();
+	});
+
+	return {
+		subscribe,
+		ref: colRef
 	};
 }
