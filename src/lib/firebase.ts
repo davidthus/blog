@@ -85,6 +85,7 @@ export function collectionStore<T>(ref: string, startWith: T[] = []) {
 			const data = snapshot.docs.map((s) => {
 				return { id: s.id, ref: s.ref, ...s.data() } as T;
 			});
+			console.log('firestore data:', data);
 			set(data);
 		});
 

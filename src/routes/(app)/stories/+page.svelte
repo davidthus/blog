@@ -1,11 +1,20 @@
 <script lang="ts">
 	import { collectionStore } from '$lib/firebase';
-	import { query } from 'firebase/firestore';
 
-	const collection = collectionStore('stories/gXzFDPQqRuGVH3MlHeg5/chapters');
+	interface Story {
+		name: string;
+		description: string;
+		id: string;
+	}
+
+	const collection = collectionStore<Story>('stories');
 </script>
 
-<!-- svelte-ignore a11y-missing-attribute -->
-<iframe
-	src="https://docs.google.com/document/d/e/2PACX-1vTWQbwTREII2M1hFTp2MRp7fyFsBIT9E5Uw_daMgYwZi9Z82cS_fZo1nyK22PcgEUsZ327HsRlZZFlK/pub?embedded=true"
-></iframe>
+<section class="flex flex-col flex-1 ml-10 gap-4 max-w-xl">
+	{#each $collection as story}
+		<article class="w-full p-6 flex flex-col items-start gap-2">
+			<h1 class="font-roman text-white text-2xl">{story?.name}</h1>
+			<p class="font-sharp text-white text-base">{story?.description}</p>
+		</article>
+	{/each}
+</section>
