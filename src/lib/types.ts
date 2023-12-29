@@ -6,6 +6,6 @@ export interface Story {
 
 export interface Chapter {
 	name: string;
-	content: string;
+	link: string;
 	id: string;
 }

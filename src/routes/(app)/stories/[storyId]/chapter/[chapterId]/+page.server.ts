@@ -1,5 +1,7 @@
 import type { PageServerLoad } from './$types';
 
 export const load = (async ({ params }) => {
-	return { id: params.id };
+	const { storyId, chapterId } = params;
+
+	return { storyId, chapterId };
 }) satisfies PageServerLoad;
