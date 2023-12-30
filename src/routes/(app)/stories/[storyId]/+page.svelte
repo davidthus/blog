@@ -52,19 +52,21 @@
 	<section
 		class="flex flex-col items-center relative py-8 px-4 flex-1 mx-10 max-w-3xl gap-4 bg-background/80 rounded-2xl shadow-lg shadow-black/30"
 	>
-		<div class="flex flex-col absolute gap-4 right-4 top-8 items-end">
-			<Edit on:click={changeEditMode} />
-			<div
-				class="flex flex-col items-center gap-2 {redButtonActivated
-					? 'bg-background rounded-xl py-2 px-1 shadow-2xl shadow-slate-900 flex-col-reverse'
-					: ''}"
-			>
-				<Delete on:click={activateRedButton} />
-				{#if redButtonActivated}
-					<Cross on:click={closeRedButton} />
-				{/if}
+		<SignedIn>
+			<div class="flex flex-col absolute gap-4 right-4 top-8 items-center">
+				<Edit on:click={changeEditMode} />
+				<div
+					class="flex flex-col items-center gap-2 {redButtonActivated
+						? 'bg-background rounded-xl py-2 px-1 shadow-2xl shadow-slate-900 flex-col-reverse'
+						: ''}"
+				>
+					<Delete on:click={activateRedButton} />
+					{#if redButtonActivated}
+						<Cross on:click={closeRedButton} />
+					{/if}
+				</div>
 			</div>
-		</div>
+		</SignedIn>
 		{#if editMode}
 			<form class="flex flex-col items-center gap-5" on:submit={formSubmit}>
 				<input
