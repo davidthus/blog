@@ -6,6 +6,7 @@
 	import Edit from '$lib/icons/edit.svelte';
 	import type { Chapter, Story } from '$lib/types';
 	import { deleteDoc, updateDoc } from 'firebase/firestore';
+	import { writable } from 'svelte/store';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
@@ -16,10 +17,11 @@
 	let editMode = false;
 	let redButtonActivated = false;
 
-	$: storyName = $story?.name;
-	$: storyDescription = $story?.description;
+	const form = writable({ name: '', description: '', id: '' });
 
-	$: console.log(storyName, storyDescription);
+	$: console.log($form);
+
+	$: form.set($story ?? { name: '', description: '', id: '' });
 
 	function changeEditMode() {
 		editMode = !editMode;
@@ -39,56 +41,63 @@
 
 	async function formSubmit() {
 		await updateDoc(story.ref, {
-			name: storyName,
-			description: storyDescription
+			name: $form.name,
+			description: $form.description
 		});
+		editMode = false;
 	}
 </script>
 
-<section
-	class="flex flex-col items-center relative py-8 px-4 flex-1 mx-10 max-w-3xl gap-4 bg-background/80 rounded-2xl shadow-lg shadow-black/30"
->
-	<div class="flex flex-col absolute gap-4 right-4 top-8 items-end">
-		<Edit on:click={changeEditMode} />
-		<div
-			class="flex flex-col items-center gap-2 {redButtonActivated
-				? 'bg-background rounded-xl py-2 px-1 shadow-2xl shadow-slate-900 flex-col-reverse'
-				: ''}"
-		>
-			<Delete on:click={activateRedButton} />
-			{#if redButtonActivated}
-				<Cross on:click={closeRedButton} />
-			{/if}
+{#if $story}
+	<section
+		class="flex flex-col items-center relative py-8 px-4 flex-1 mx-10 max-w-3xl gap-4 bg-background/80 rounded-2xl shadow-lg shadow-black/30"
+	>
+		<div class="flex flex-col absolute gap-4 right-4 top-8 items-end">
+			<Edit on:click={changeEditMode} />
+			<div
+				class="flex flex-col items-center gap-2 {redButtonActivated
+					? 'bg-background rounded-xl py-2 px-1 shadow-2xl shadow-slate-900 flex-col-reverse'
+					: ''}"
+			>
+				<Delete on:click={activateRedButton} />
+				{#if redButtonActivated}
+					<Cross on:click={closeRedButton} />
+				{/if}
+			</div>
 		</div>
-	</div>
-	{#if editMode}
-		<form class="flex flex-col items-center gap-5" on:submit={formSubmit}>
-			<input
-				class="font-roman text-text text-6xl text-center bg-background/80 rounded-2xl shadow-lg shadow-black/30"
-				bind:value={storyName}
-			/>
-			<input
-				class="font-roman text-text text-2xl mb-8 text-center bg-background/80 rounded-xl shadow-lg shadow-black/30"
-				bind:value={storyDescription}
-			/>
-		</form>
-	{:else}
-		<h1 class="font-roman text-text text-6xl text-center">{$story?.name}</h1>
-		<p class="font-roman text-text text-2xl mb-12">{$story?.description}</p>
-	{/if}
-	<p class="font-roman text-text text-2xl mb-8">Chapters:</p>
-	<ul class="flex flex-col w-full gap-2">
-		<SignedIn>
-			<li class="w-fit rounded-md py-2 px-4 shadow-md shadow-slate-900/70 hover:cursor-pointer">
-				<h2 class="font-roman text-text text-xl">New Chapter</h2>
-			</li>
-		</SignedIn>
-		{#each $chapters as chapter, i}
-			<li class="w-full rounded-md py-2 px-4 shadow-md shadow-slate-900/70">
-				<a href={`/stories/${data.storyId}/chapter/${chapter.id}`}>
-					<h2 class="font-roman text-text text-xl">Chapter {i + 1} - {chapter.name}</h2>
-				</a>
-			</li>
-		{/each}
-	</ul>
-</section>
+		{#if editMode}
+			<form class="flex flex-col items-center gap-5" on:submit={formSubmit}>
+				<input
+					class="font-roman text-text text-6xl text-center bg-background/80 rounded-2xl shadow-lg shadow-black/30"
+					bind:value={$form.name}
+				/>
+				<input
+					class="font-roman text-text text-2xl text-center bg-background/80 rounded-xl shadow-lg shadow-black/30"
+					bind:value={$form.description}
+				/>
+				<button
+					class="outline-none border-none bg-accent rounded-xl font-roman text-text text-lg px-4 py-2 mb-4"
+					type="submit">Submit</button
+				>
+			</form>
+		{:else}
+			<h1 class="font-roman text-text text-6xl text-center">{$story?.name}</h1>
+			<p class="font-roman text-text text-2xl mb-12">{$story?.description}</p>
+		{/if}
+		<p class="font-roman text-text text-2xl mb-8">Chapters:</p>
+		<ul class="flex flex-col w-full gap-2">
+			<SignedIn>
+				<li class="w-fit rounded-md py-2 px-4 shadow-md shadow-slate-900/70 hover:cursor-pointer">
+					<h2 class="font-roman text-text text-xl">New Chapter</h2>
+				</li>
+			</SignedIn>
+			{#each $chapters as chapter, i}
+				<li class="w-full rounded-md py-2 px-4 shadow-md shadow-slate-900/70">
+					<a href={`/stories/${data.storyId}/chapter/${chapter.id}`}>
+						<h2 class="font-roman text-text text-xl">Chapter {i + 1} - {chapter.name}</h2>
+					</a>
+				</li>
+			{/each}
+		</ul>
+	</section>
+{/if}
