@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import SignedIn from '$lib/components/signedIn.svelte';
 	import { docStore } from '$lib/firebase';
 	import Cross from '$lib/icons/cross.svelte';
@@ -18,8 +19,6 @@
 
 	const form = writable({ name: '', link: '', id: '' });
 
-	$: console.log($form);
-
 	$: form.set($chapter ?? { name: '', link: '', id: '' });
 
 	function changeEditMode() {
@@ -29,6 +28,7 @@
 	async function activateRedButton() {
 		if (redButtonActivated) {
 			await deleteDoc(chapter.ref);
+			goto(`/stories/${data.storyId}`);
 		} else {
 			redButtonActivated = !redButtonActivated;
 		}
@@ -49,7 +49,7 @@
 
 <div class="flex flex-1 justify-center">
 	<section
-		class="flex flex-col h-[60vh] items-center py-8 px-4 flex-1 mx-10 max-w-3xl gap-10 bg-background/80 rounded-2xl shadow-lg shadow-black/30 relative"
+		class="flex flex-col h-fit items-center py-8 px-4 flex-1 max-w-3xl gap-10 bg-background/80 rounded-2xl shadow-lg shadow-black/30 relative"
 	>
 		<SignedIn>
 			<div class="flex flex-col absolute gap-4 right-4 top-8 items-center">
@@ -84,8 +84,12 @@
 				</form>
 			{:else}
 				<h1 class="font-roman text-text text-6xl text-center">{$chapter?.name}</h1>
-				<iframe src="{$chapter?.link}?embedded=true" class="w-full h-1/2" title="chapter content"
-				></iframe>
+				{#if $chapter?.link}
+					<iframe src="{$chapter?.link}?embedded=true" class="w-full h-1/2" title="chapter content"
+					></iframe>
+				{:else}
+					<p class="text-text text-xl font-roman">Chapter coming soon...</p>
+				{/if}
 			{/if}
 		{/if}
 	</section>

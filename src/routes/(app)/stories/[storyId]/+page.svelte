@@ -20,13 +20,13 @@
 
 	const form = writable({ name: '', description: '', id: '' });
 
-	$: console.log($form);
-
 	$: form.set($story ?? { name: '', description: '', id: '' });
 
 	function changeEditMode() {
 		editMode = !editMode;
 	}
+
+	$: console.log(story);
 
 	async function activateRedButton() {
 		if (redButtonActivated) {
@@ -73,10 +73,12 @@
 			<form class="flex flex-col items-center gap-5" on:submit={formSubmit}>
 				<input
 					class="font-roman text-text text-6xl text-center bg-background/80 rounded-2xl shadow-lg shadow-black/30"
+					required
 					bind:value={$form.name}
 				/>
 				<input
 					class="font-roman text-text text-2xl text-center bg-background/80 rounded-xl shadow-lg shadow-black/30"
+					required
 					bind:value={$form.description}
 				/>
 				<button
@@ -89,13 +91,15 @@
 			<p class="font-roman text-text text-2xl mb-12">{$story?.description}</p>
 		{/if}
 		{#if $chapters.length > 0}
-			<p class="font-roman text-text text-2xl mb-8">Chapters:</p>
+			<p class="font-roman text-text text-2xl mb-4">Chapters:</p>
 		{/if}
 		<ul class="flex flex-col w-full gap-2">
 			<SignedIn>
-				<li class="w-fit rounded-md py-2 px-4 shadow-md shadow-slate-900/70 hover:cursor-pointer">
-					<h2 class="font-roman text-text text-xl">New Chapter</h2>
-				</li>
+				<a href="/stories/{story.id}/chapter/add">
+					<li class="w-fit rounded-md py-2 px-4 shadow-md shadow-slate-900/70 hover:cursor-pointer">
+						<h2 class="font-roman text-text text-xl">New Chapter</h2>
+					</li>
+				</a>
 			</SignedIn>
 			{#each $chapters as chapter, i}
 				<li class="w-full rounded-md py-2 px-4 shadow-md shadow-slate-900/70">
