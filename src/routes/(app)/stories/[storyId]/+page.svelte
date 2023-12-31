@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import SignedIn from '$lib/components/signedIn.svelte';
 	import { collectionStore, docStore } from '$lib/firebase';
 	import Cross from '$lib/icons/cross.svelte';
@@ -30,6 +31,7 @@
 	async function activateRedButton() {
 		if (redButtonActivated) {
 			await deleteDoc(story.ref);
+			goto('/stories');
 		} else {
 			redButtonActivated = !redButtonActivated;
 		}
@@ -86,7 +88,9 @@
 			<h1 class="font-roman text-text text-6xl text-center">{$story?.name}</h1>
 			<p class="font-roman text-text text-2xl mb-12">{$story?.description}</p>
 		{/if}
-		<p class="font-roman text-text text-2xl mb-8">Chapters:</p>
+		{#if $chapters.length > 0}
+			<p class="font-roman text-text text-2xl mb-8">Chapters:</p>
+		{/if}
 		<ul class="flex flex-col w-full gap-2">
 			<SignedIn>
 				<li class="w-fit rounded-md py-2 px-4 shadow-md shadow-slate-900/70 hover:cursor-pointer">

@@ -8,9 +8,13 @@
 
 <section class="flex flex-col flex-1 ml-10 gap-4 max-w-xl">
 	<SignedIn>
-		<article class="w-fit p-6 rounded-2xl shadow-lg max-w-52 shadow-slate-900 hover:cursor-pointer">
-			<h1 class="font-roman text-text text-2xl">Add story</h1>
-		</article>
+		<a href="/stories/add">
+			<article
+				class="w-fit p-6 rounded-2xl shadow-lg max-w-52 shadow-slate-900 hover:cursor-pointer"
+			>
+				<h1 class="font-roman text-text text-2xl">Add story</h1>
+			</article>
+		</a>
 	</SignedIn>
 	{#each $collection as story}
 		<a href="/stories/{story.id}">
